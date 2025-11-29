@@ -6,6 +6,9 @@ from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditFor
 from .models import Profile
 from django.contrib import messages
 
+from django.views.generic import TemplateView
+
+
 # Create your views here.
 
 def user_login (request):

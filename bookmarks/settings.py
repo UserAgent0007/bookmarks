@@ -27,6 +27,11 @@ SECRET_KEY = 'django-insecure-q-8t&*5#$*o+2@aby#y_n_6h7g%2$fm#^#le)le0kekt5_v&hr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
+    mimetypes.add_type("text/css", ".css", True)
+
 ALLOWED_HOSTS = [
     'mysite.com',
     'localhost',
@@ -38,6 +43,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig', # Для аутентифікації
+    'images.apps.ImagesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
