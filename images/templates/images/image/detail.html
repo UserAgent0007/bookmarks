@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ image.title }}{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ image.title }}
+    </h1>
+    {% load thumbnail %}
+
+{#    <a href="{{ image.image.url }}">#}
+{#        <img src="{% thumbnail image.image 300x0 %}" class="image-detail" alt="{{ image.title }}">#}
+{#    </a>#}
+    <img src="{{ image.image.url }}" class="image-detail" alt="{{ image.title }}">
+    {#  При натисканні на картинку здійсниться перехід на повнорозмірну, а зараз відображатиметься мініатюра  #}
+{#  В thumbnail ми вказуємо яка саме картинка має бути і розміри, тут ширина 300px а висота динамічно змінюється(пистосовується)  #}
+
+    {% with total_likes=image.users_like.count %}
+        <div class="image-info">
+            <div>
+                <span class="count">
+                    {{ total_likes }} like{{ total_likes|pluralize }}
+                </span>
+            </div>
+            {{ image.description|linebreaks }}
+        </div>
+        <div class="image-likes">
+            {% for user in image.users_like.all %}
+                <div>
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url}}" alt="{{ user.username }}">
+                    {% endif %}
+                    <p>{{ user.first_name }}</p>
+                </div>
+            {% empty %}
+
+                No likes yet.
+
+            {% endfor %}
+        </div>
+    {% endwith %}
+{% endblock %}
