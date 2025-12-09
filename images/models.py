@@ -43,6 +43,8 @@ class Image(models.Model):
         blank=True
     )
 
+    # ДЛя M2M полів використовуються add(), remove(), clear(), після них не потрібно використовувати save()
+
     class Meta:
 
         indexes = [

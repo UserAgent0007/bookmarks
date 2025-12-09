@@ -16,7 +16,7 @@
                     <a href="{% url 'dashboard' %}">My dashboard</a>
                 </li>
                 <li {% if section == 'images' %} class="selected" {% endif %}>
-                    <a href="#">Imagies</a>
+                    <a href="{% url 'images:list' %}">Imagies</a>
                 </li>
                 <li {% if section == 'people' %} class="selected" {% endif %}>
                     <a href="#">People</a>
@@ -51,5 +51,13 @@
 
         {% endblock %}
     </div>
+    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script>
+        const csrfToken = Cookies.get('csrftoken');
+        document.addEventListener('DOMContentLoaded', function(event){
+            {% block domready %} {# Потрібне для прописання js коду у дочірніх шаблонах #}
+            {% endblock %}
+        })
+    </script>
 </body>
 </html>

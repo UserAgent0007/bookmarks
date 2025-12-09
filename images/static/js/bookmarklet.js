@@ -54,7 +54,7 @@ function bookmarkletLaunch(){
                 + encodeURIComponent(imageSelected.src) // перетворення на рядок який буде читабельним для url адреси, наприклад "super%20title"
                 + '&title='
                 + encodeURIComponent(document.title),
-                '_blank'
+                '_blank' // сторінка відкривається в новій вкладці або вікні
             );
         });
      });
