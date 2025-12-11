@@ -43,12 +43,17 @@ class Image(models.Model):
         blank=True
     )
 
+    total_likes = models.PositiveIntegerField(
+        default=0
+    )
+
     # ДЛя M2M полів використовуються add(), remove(), clear(), після них не потрібно використовувати save()
 
     class Meta:
 
         indexes = [
-            models.Index(fields=['-created'])
+            models.Index(fields=['-created']),
+            models.Index(fields=['-total_likes'])
         ]
 
         ordering = [

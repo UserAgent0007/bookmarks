@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
+from actions.models import Action
+from actions.utils import create_action
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile, Contact
 from django.contrib import messages
@@ -59,10 +61,19 @@ def user_login (request):
 @login_required
 def dashboard (request):
 
+    actions = Action.objects.exclude(user=request.user)
+    following_ids = request.user.following.values_list('id', flat=True) # взнаємо id користувачів на яких підписаний поточний користувач
+
+    if following_ids:
+        actions = actions.filter(user_id__in=following_ids) # з'ясовуємо дії користувачів на яких підписаний поточний користувач
+
+    # prefetch_related використовується для оптимізації запитів, коли ми маємо зв язок "багато до багатьох" або "багато до одного" або коли маємо GenericForeignKey та інші для роботи з випередженням (за наперед невідомими моделями)
+    actions = actions.select_related('user', 'user__profile').prefetch_related('target')[:10] # прописуємо з якими полями ми ще зробимо зв язок для оптимізації запитів (використовується JOIN) select_related
+
     return render (
         request,
         'account/dashboard.html',
-        {'section':'dashboard'}
+        {'section':'dashboard', 'actions':actions}
     )
 
 def register(request):
@@ -80,7 +91,7 @@ def register(request):
             new_user.save()
 
             Profile.objects.create(user=new_user)
-
+            create_action(new_user,'has created an account')
             return render(request, 'account/register_done.html', {'new_user':new_user})
         
     else:
@@ -163,6 +174,7 @@ def user_follow(request):
                     user_from=request.user,
                     user_to=user
                 )
+                create_action(request.user, 'is following', user)
             else:
                 Contact.objects.filter(
                     user_from=request.user,

@@ -59,11 +59,13 @@ INSTALLED_APPS = [
     'social_django',
     'django_extensions',
     'easy_thumbnails',
-     'actions.apps.ActionsConfig'
+    'actions.apps.ActionsConfig',
+    'debug_toolbar',
 
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -177,3 +179,10 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.user.user_details'
 ]
 
+INTERNAL_IPS=[
+    '127.0.0.1',
+]
+
+REDIS_HOST='localhost'
+REDIS_PORT=6379
+REDIS_DB=0
